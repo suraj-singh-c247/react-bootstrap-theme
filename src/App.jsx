@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import FormComponent from "./componets/FormComponent";
-import ThemeToggle from "./componets/common/ThemToggle";
+import ThemeToggle from "./componets/common/ThemeToggle";
 
 function App() {
   return (
