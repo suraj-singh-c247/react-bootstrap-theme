@@ -1,4 +1,90 @@
-@import "./custom-variables";
+// 1️⃣ Enable CSS variables
+$enable-css-variables: true;
+
+// 2️⃣ Light theme overrides
+$primary: #ff0000 !default;
+$secondary: #64748b !default;
+$success: #14ae5c !default;
+$info: #43acff !default;
+$warning: #ff9800 !default;
+$danger: #ea3535 !default;
+$light: #fffdfa !default;
+$dark: #0f172a !default;
+$body-color: #000 !default;
+$body-bg: #fff !default;
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+);
+
+// 3️⃣ Dark theme variables (for runtime override)
+$dark-theme-colors: (
+  primary: #000000,
+  secondary: #94a3b8,
+  success: #22c55e,
+  info: #60a5fa,
+  warning: #fbbf24,
+  danger: #ef4444,
+  light: #1e293b,
+  dark: #0f172a,
+  text: #ffffff,
+);
+
+$dark-body-color: #ffffff;
+$dark-body-bg: #0f172a;
+
+// 4️⃣ Import Bootstrap (after setting variables)
 @import "bootstrap/scss/bootstrap";
 
-@import "./runtime-theme";
+// 5️⃣ Dark mode CSS variable override
+[data-bs-theme="dark"] {
+  --bs-body-color: #{$dark-body-color};
+  --bs-body-bg: #{$dark-body-bg};
+
+  @each $name, $value in $dark-theme-colors {
+    @if $name != text {
+      --bs-#{$name}: #{$value};
+      --bs-btn-#{$name}-color: #{map-get($dark-theme-colors, text)};
+      --bs-btn-#{$name}-bg: var(--bs-#{$name});
+      --bs-alert-#{$name}-color: #{map-get($dark-theme-colors, text)};
+      --bs-badge-#{$name}-color: #{map-get($dark-theme-colors, text)};
+      --bs-text-#{$name}: #{map-get($dark-theme-colors, text)};
+    }
+  }
+}
+
+body {
+  color: var(--bs-body-color) !important;
+
+  // Make all children inherit text color
+  * {
+    color: inherit !important;
+  }
+
+  // Components that set their own colors
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  .btn,
+  .alert,
+  .badge {
+    color: inherit !important;
+  }
+
+  // Placeholders
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder {
+    color: var(--bs-body-color) !important;
+    opacity: 1; // ensure it's fully visible
+  }
+}
