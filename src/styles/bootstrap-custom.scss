@@ -60,25 +60,6 @@ $dark-body-bg: #0f172a;
   }
 }
 
-// Force all text and components to inherit dark mode colors
-body {
-  color: var(--bs-text-color) !important;
-  background-color: var(--bs-body-bg) !important;
-
-  * {
-    color: inherit !important;
-    background-color: inherit !important;
-    border-color: inherit !important;
-  }
-
-  input::placeholder,
-  textarea::placeholder,
-  select::placeholder {
-    color: var(--bs-text-color) !important;
-    opacity: 1;
-  }
-}
-
 // Generate utility classes for dark mode
 @each $name, $value in $dark-theme-colors {
   @if $name != text {
@@ -111,12 +92,6 @@ body {
 body {
   color: var(--bs-text-color) !important;
   background-color: var(--bs-body-bg) !important;
-
-  * {
-    color: inherit !important;
-    background-color: inherit !important;
-    border-color: inherit !important;
-  }
 
   input::placeholder,
   textarea::placeholder,
