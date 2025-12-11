@@ -1,7 +1,5 @@
-// 1️⃣ Enable CSS variables
 $enable-css-variables: true;
 
-// 2️⃣ Light theme overrides
 $primary: #ff0000 !default;
 $secondary: #64748b !default;
 $success: #14ae5c !default;
@@ -14,19 +12,19 @@ $body-color: #000 !default;
 $body-bg: #fff !default;
 
 $theme-colors: (
-  "primary": $primary,
-  "secondary": $secondary,
-  "success": $success,
-  "info": $info,
-  "warning": $warning,
-  "danger": $danger,
-  "light": $light,
-  "dark": $dark,
+  primary: $primary,
+  secondary: $secondary,
+  success: $success,
+  info: $info,
+  warning: $warning,
+  danger: $danger,
+  light: $light,
+  dark: $dark,
+  text: $body-color
 );
 
-// 3️⃣ Dark theme variables (for runtime override)
 $dark-theme-colors: (
-  primary: #000000,
+  primary: #fbbf24,
   secondary: #94a3b8,
   success: #22c55e,
   info: #60a5fa,
@@ -40,51 +38,95 @@ $dark-theme-colors: (
 $dark-body-color: #ffffff;
 $dark-body-bg: #0f172a;
 
-// 4️⃣ Import Bootstrap (after setting variables)
 @import "bootstrap/scss/bootstrap";
 
-// 5️⃣ Dark mode CSS variable override
+// Dark mode CSS variables
 [data-bs-theme="dark"] {
   --bs-body-color: #{$dark-body-color};
   --bs-body-bg: #{$dark-body-bg};
+  --bs-text-color: #{map-get($dark-theme-colors, text)};
 
   @each $name, $value in $dark-theme-colors {
-    @if $name != text {
-      --bs-#{$name}: #{$value};
-      --bs-btn-#{$name}-color: #{map-get($dark-theme-colors, text)};
-      --bs-btn-#{$name}-bg: var(--bs-#{$name});
-      --bs-alert-#{$name}-color: #{map-get($dark-theme-colors, text)};
-      --bs-badge-#{$name}-color: #{map-get($dark-theme-colors, text)};
-      --bs-text-#{$name}: #{map-get($dark-theme-colors, text)};
+    --bs-#{$name}: #{$value};
+    --bs-btn-#{$name}-bg: var(--bs-#{$name});
+    --bs-btn-#{$name}-color: var(--bs-text-color);
+    --bs-alert-#{$name}-bg: var(--bs-#{$name});
+    --bs-alert-#{$name}-color: var(--bs-text-color);
+    --bs-badge-#{$name}-bg: var(--bs-#{$name});
+    --bs-badge-#{$name}-color: var(--bs-text-color);
+    --bs-bg-#{$name}: var(--bs-#{$name});
+    --bs-border-#{$name}: var(--bs-#{$name});
+    --bs-text-#{$name}: var(--bs-text-color);
+  }
+}
+
+// Force all text and components to inherit dark mode colors
+body {
+  color: var(--bs-text-color) !important;
+  background-color: var(--bs-body-bg) !important;
+
+  * {
+    color: inherit !important;
+    background-color: inherit !important;
+    border-color: inherit !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder,
+  select::placeholder {
+    color: var(--bs-text-color) !important;
+    opacity: 1;
+  }
+}
+
+// Generate utility classes for dark mode
+@each $name, $value in $dark-theme-colors {
+  @if $name != text {
+    [data-bs-theme="dark"] {
+      .btn-#{$name} {
+        background-color: var(--bs-btn-#{$name}-bg) !important;
+        color: var(--bs-btn-#{$name}-color) !important;
+        border-color: var(--bs-btn-#{$name}-border) !important;
+      }
+
+      .alert-#{$name} {
+        background-color: var(--bs-alert-#{$name}-bg) !important;
+        color: var(--bs-alert-#{$name}-color) !important;
+        border-color: var(--bs-alert-#{$name}-bg) !important;
+      }
+
+      .badge-#{$name} {
+        background-color: var(--bs-badge-#{$name}-bg) !important;
+        color: var(--bs-badge-#{$name}-color) !important;
+      }
+
+      .bg-#{$name} { background-color: var(--bs-bg-#{$name}) !important; }
+      .border-#{$name} { border-color: var(--bs-border-#{$name}) !important; }
+      .text-#{$name} { color: var(--bs-text-#{$name}) !important; }
     }
   }
 }
 
+// Force all text and components to inherit colors
 body {
-  color: var(--bs-body-color) !important;
+  color: var(--bs-text-color) !important;
+  background-color: var(--bs-body-bg) !important;
 
-  // Make all children inherit text color
   * {
     color: inherit !important;
+    background-color: inherit !important;
+    border-color: inherit !important;
   }
 
-  // Components that set their own colors
-  button,
-  a,
-  input,
-  textarea,
-  select,
-  .btn,
-  .alert,
-  .badge {
-    color: inherit !important;
-  }
-
-  // Placeholders
   input::placeholder,
   textarea::placeholder,
   select::placeholder {
-    color: var(--bs-body-color) !important;
-    opacity: 1; // ensure it's fully visible
+    color: var(--bs-text-color) !important;
+    opacity: 1;
   }
+  
+}
+
+.text-muted {
+  color: var(--bs-text-color) !important;
 }
